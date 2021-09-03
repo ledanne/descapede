@@ -16,7 +16,7 @@ class Client:
         response = await self.http.connect(Route("GET", "users/@me"))
 
         if response.status == 200:
-            response_json = await response.json()
+            response_json = "something"
             return response_json
 
     async def close_connection(self):
