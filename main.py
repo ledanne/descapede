@@ -9,8 +9,14 @@ async def main():
 
     client = Client(token)
 
-    user = await client.myself()
+    channel = await client.get_channel(870770512513630248)
 
-    print(user)
+    last_message = await channel.last_message()
+
+    print(await last_message.to_dictionary())
+
+    response = await channel.message("jhelo")
+
+    print(response)
     
 asyncio.run(main())

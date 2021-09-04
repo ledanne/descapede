@@ -9,7 +9,7 @@ class Route:
 
 class HTTPClient:
     def __init__(self, token:str):
-        self.client_session = aiohttp.ClientSession()
+        self.client_session = None
 
         self.authentication = {
             "Authorization":f"Bot {token}",
@@ -17,9 +17,12 @@ class HTTPClient:
         }
     
     async def connect(self, route:Route, payload:dict = {}):
+        self.client_session = aiohttp.ClientSession()
         async with self.client_session as session:
             async with session.request(route.method, route.url, headers=self.authentication) as response:
-                return response
+                await self.close_session()
+
+                return await response.json()
     
     async def login(self) -> bool:
         """
