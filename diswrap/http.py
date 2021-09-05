@@ -1,4 +1,4 @@
-import aiohttp
+import aiohttp, json
 
 ENDPOINT = "https://discord.com/api/v9/"
 
@@ -19,9 +19,9 @@ class HTTPClient:
     async def connect(self, route:Route, payload:dict = {}):
         self.client_session = aiohttp.ClientSession()
         async with self.client_session as session:
-            async with session.request(route.method, route.url, headers=self.authentication) as response:
+            async with session.request(route.method, route.url, json = payload if payload else None, headers=self.authentication) as response:
                 await self.close_session()
-
+                
                 return await response.json()
     
     async def login(self) -> bool:

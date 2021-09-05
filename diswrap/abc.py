@@ -94,15 +94,9 @@ class Channel:
         await message.from_dictionary(response)
         return message
     
-    async def message(self, message:str):
+    async def message(self, msg:str):
         response = await self.bot_caller.http.connect(Route("POST", f"channels/{self.id}/messages"), {
-            "content":message,
-            "tts":False,
-            "nonce":None,
-            "embeds":[],
-            "sticker_ids":[],
-            "components":[],
-            "message_reference":None
+            "content":msg
         })
 
         return response

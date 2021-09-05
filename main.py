@@ -1,22 +1,30 @@
-from diswrap import Client
+from diswrap import Client, DMChannel
 import aiohttp
 
 import os
 import asyncio
 
-async def main():
-    token = os.environ["token"]
+token = os.environ["token"]
+client = Client(token)
 
-    client = Client(token)
+@client.event
+async def ready():
+    channel = await client.get_channel(860915745927331891)
 
-    channel = await client.get_channel(870770512513630248)
+    setattr(client, "mychannel", channel)
 
-    last_message = await channel.last_message()
+last_message = None
 
-    print(await last_message.to_dictionary())
+@client.event
+async def tick():
+    last_message = await client.mychannel.last_message()
+    if last_message:
+        message = await client.mychannel.last_message()
 
-    response = await channel.message("jhelo")
+        if last_message != message:
+            if message.content == "do shit my bot":
+                await client.mychannel.message("ok bitch")
+            
+            last_message = message
 
-    print(response)
-    
-asyncio.run(main())
+asyncio.run(client.run())
